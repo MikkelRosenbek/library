@@ -2,13 +2,15 @@ package dk.ek.libary.catalog.service;
 
 import dk.ek.libary.catalog.model.Work;
 import dk.ek.libary.catalog.repository.WorkRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class WorkService {
 
-    private WorkRepository workRepository;
+    private final WorkRepository workRepository;
 
     public WorkService(WorkRepository workRepository) {
         this.workRepository = workRepository;
