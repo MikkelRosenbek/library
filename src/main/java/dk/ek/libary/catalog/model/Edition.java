@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Edition {
@@ -14,6 +15,9 @@ public class Edition {
     private Integer year;
     private String format;
 
+    @ManyToOne
+    private Publisher publisher;
+
     public Edition() {
     }
 
@@ -22,6 +26,14 @@ public class Edition {
         this.editionNumber = editionNumber;
         this.year = year;
         this.format = format;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     public Long getId() {
