@@ -18,6 +18,9 @@ public class Edition {
     @ManyToOne
     private Publisher publisher;
 
+    @ManyToOne
+    private Work work;
+
     public Edition() {
     }
 
@@ -34,6 +37,14 @@ public class Edition {
 
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
+    }
+
+    public Work getWork() {
+        return work;
+    }
+
+    public void setWork(Work work) {
+        this.work = work;
     }
 
     public Long getId() {
@@ -67,4 +78,5 @@ public class Edition {
     public void setFormat(String format) {
         this.format = format;
     }
+
 }
