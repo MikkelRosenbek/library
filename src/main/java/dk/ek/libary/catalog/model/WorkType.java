@@ -2,5 +2,9 @@ package dk.ek.libary.catalog.model;
 
 public enum WorkType {
     BOOK,
-    ARTICLE
+    ARTICLE,
+    NOVEL,
+    NONFICTION,
+    EPIC,
+    PLAY
 }
