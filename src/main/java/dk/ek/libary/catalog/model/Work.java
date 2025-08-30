@@ -17,6 +17,18 @@ public class Work {
     private String authors;
     private String subjects;
 
+    public Work() {
+    }
+
+    public Work(Long id, String title, WorkType workType, String details, String authors, String subjects) {
+        this.id = id;
+        this.title = title;
+        this.workType = workType;
+        this.details = details;
+        this.authors = authors;
+        this.subjects = subjects;
+    }
+
     public Long getId() {
         return id;
     }
