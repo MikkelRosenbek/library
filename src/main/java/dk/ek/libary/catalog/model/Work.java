@@ -19,7 +19,7 @@ public class Work {
     private String title;
     private WorkType workType;
     private String details;
-    private String authors;
+    private String author;
     private String subjects;
 
     @OneToMany(mappedBy = "work", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -28,12 +28,12 @@ public class Work {
     public Work() {
     }
 
-    public Work(Long id, String title, WorkType workType, String details, String authors, String subjects) {
+    public Work(Long id, String title, WorkType workType, String details, String author, String subjects) {
         this.id = id;
         this.title = title;
         this.workType = workType;
         this.details = details;
-        this.authors = authors;
+        this.author = author;
         this.subjects = subjects;
     }
 
@@ -69,12 +69,12 @@ public class Work {
         this.details = details;
     }
 
-    public String getAuthors() {
-        return authors;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAuthors(String authors) {
-        this.authors = authors;
+    public void setAuthor(String authors) {
+        this.author = authors;
     }
 
     public String getSubjects() {

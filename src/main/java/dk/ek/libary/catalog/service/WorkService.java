@@ -38,7 +38,7 @@ public class WorkService {
         work.setTitle(uodatedWork.getTitle());
         work.setWorkType(uodatedWork.getWorkType());
         work.setDetails(uodatedWork.getDetails());
-        work.setAuthors(uodatedWork.getAuthors());
+        work.setAuthor(uodatedWork.getAuthor());
         work.setSubjects(uodatedWork.getSubjects());
         return workRepository.save(work);
     }
