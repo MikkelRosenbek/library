@@ -1,5 +1,6 @@
 package dk.ek.libary.catalog.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +13,7 @@ public class Edition {
     @Id
     private Long id;
     private String editionNumber;
+    @Column(name = "edition_year")
     private Integer year;
     private String format;
 

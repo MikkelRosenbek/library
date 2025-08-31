@@ -3,12 +3,14 @@ package dk.ek.libary.catalog.dto;
 import dk.ek.libary.catalog.model.Edition;
 import dk.ek.libary.catalog.model.Work;
 import dk.ek.libary.catalog.model.WorkType;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class WorkMapper {
-    public static WorkDTO.WorkDto toDto(Work work) {
+    public WorkDTO.WorkDto toDto(Work work) {
 
         List<EditionDTO.EditionDto> editions = new ArrayList<>();
 
@@ -18,7 +20,7 @@ public class WorkMapper {
         return new WorkDTO.WorkDto(work.getId(), work.getTitle(), work.getWorkType().name(), work.getDetails(), work.getAuthor(), editions, work.getSubjects());
     }
 
-    public static  Work toEntity(WorkDTO.WorkDto workDto) {
+    public Work toEntity(WorkDTO.WorkDto workDto) {
         Work work = new Work();
         work.setId(workDto.id());
         work.setTitle(workDto.title());

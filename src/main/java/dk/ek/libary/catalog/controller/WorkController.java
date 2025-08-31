@@ -1,5 +1,6 @@
 package dk.ek.libary.catalog.controller;
 
+import dk.ek.libary.catalog.dto.WorkDTO;
 import dk.ek.libary.catalog.model.Work;
 import dk.ek.libary.catalog.service.WorkService;
 import org.springframework.http.HttpStatus;
@@ -27,61 +28,56 @@ public class WorkController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Work>> getAllWorks() {
+    public ResponseEntity<List<WorkDTO.WorkDto>> getAllWorks() {
         try {
-            List<Work> works = workService.getAllWorks();
-            return ResponseEntity.ok(works);
-        } catch (Exception e) {
+            return ResponseEntity.ok(workService.getAllWorks());
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Work> getWorkById(@PathVariable Long id) {
+    public ResponseEntity<WorkDTO.WorkDto> getWorkById(@PathVariable Long id) {
         try {
-            Work work = workService.getWorkById(id);
-            return ResponseEntity.ok(work);
-        } catch (Exception e) {
+            return ResponseEntity.ok(workService.getWorkById(id));
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Work> addWork(@RequestBody Work work) {
+    public ResponseEntity<WorkDTO.WorkDto> addWork(@RequestBody WorkDTO.WorkDto workDto) {
         try {
-            Work newWork = workService.createWork(work);
-            return ResponseEntity.ok(newWork);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(work);
+        return ResponseEntity.status(HttpStatus.CREATED).body(workService.createWork(workDto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Work> updateWork(@PathVariable Long id, @RequestBody Work updatedWork) {
+    public ResponseEntity<WorkDTO.WorkDto> updateWork(@PathVariable Long id, @RequestBody WorkDTO.WorkDto workDto) {
         try {
-            workService.updateWork(id, updatedWork);
-            return ResponseEntity.ok(updatedWork);
-        } catch (Exception e) {
+            return ResponseEntity.ok(workService.updateWork(id, workDto));
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Work> deleteWork(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteWork(@PathVariable Long id) {
         try {
             workService.deleteWork(id);
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Work>> searchWorks (@RequestParam String title) {
+    public ResponseEntity<List<WorkDTO.WorkDto>> searchWorks(@RequestParam String title) {
         try {
-            List<Work> works = workService.searchWorks(title);
-            return ResponseEntity.ok(works);
-        } catch (Exception e) {
+            return ResponseEntity.ok(workService.searchWorks(title));
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
