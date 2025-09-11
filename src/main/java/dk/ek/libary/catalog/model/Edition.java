@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 public class Edition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+
     private Long id;
     private String editionNumber;
     @Column(name = "edition_year")

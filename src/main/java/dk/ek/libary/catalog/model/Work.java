@@ -1,25 +1,30 @@
 package dk.ek.libary.catalog.model;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
 public class Work {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String title;
     private WorkType workType;
     private String details;
 
-    @ManyToMany
-    private Author author;
 
-    @ManyToMany
-    private Subject subjects;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Author> authors = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Subject> subjects = new HashSet<>();
 
     @OneToMany(mappedBy = "work", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Edition> editions = new ArrayList<>();
@@ -28,13 +33,11 @@ public class Work {
     public Work() {
     }
 
-    public Work(Long id, String title, WorkType workType, String details, Author author, Subject subjects) {
+    public Work(Long id, String title, WorkType workType, String details) {
         this.id = id;
         this.title = title;
         this.workType = workType;
         this.details = details;
-        this.author = author;
-        this.subjects = subjects;
     }
 
     public Long getId() {
@@ -69,20 +72,43 @@ public class Work {
         this.details = details;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(Author authors) {
-        this.author = authors;
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 
-    public Subject getSubjects() {
+    public void addAuthor(Author author) {
+        if (author == null) return;
+        this.authors.add(author);
+        author.getWorks().add(this);
+    }
+
+    public void removeAuthor(Author author) {
+        if (author == null) return;
+        this.authors.remove(author);
+        author.getWorks().remove(this);
+    }
+
+
+    public Set<Subject> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(Subject subjects) {
+    public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
+    }
+
+    public void addSubject(Subject subject) {
+        if (subject == null) return;
+        this.subjects.add(subject);
+    }
+
+    public void removeSubject(Subject subject) {
+        if (subject == null) return;
+        this.subjects.remove(subject);
     }
 
     public List<Edition> getEditions() {

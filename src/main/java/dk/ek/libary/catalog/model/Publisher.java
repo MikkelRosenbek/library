@@ -10,6 +10,7 @@ public class Publisher {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+
     private Long id;
     private String name;
     private String address;

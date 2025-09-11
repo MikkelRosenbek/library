@@ -1,30 +1,25 @@
 package dk.ek.libary.catalog.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Entity
 public class Author {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String name;
 
-//    @ManyToMany(mappedBy = "authors")
-//    private List<Work> works = new ArrayList<>();
     @ManyToMany(mappedBy = "authors")
-    private List<Subject> subjects = new ArrayList<>();
+    private Set<Work> works = new HashSet<>();
 
-    public Author(Long id, String name, /*List<Work> works,*/ List<Subject> subjects) {
+
+    public Author(Long id, String name) {
         this.id = id;
         this.name = name;
-        //this.works = works;
-        this.subjects = subjects;
     }
 
     public Author() {
@@ -46,21 +41,11 @@ public class Author {
         this.name = name;
     }
 
-    /*
-    public List<Work> getWorks() {
+    public Set<Work> getWorks() {
         return works;
     }
 
-    public void setWorks(List<Work> works) {
+    public void setWorks(Set<Work> works) {
         this.works = works;
-    }
-    */
-
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
     }
 }

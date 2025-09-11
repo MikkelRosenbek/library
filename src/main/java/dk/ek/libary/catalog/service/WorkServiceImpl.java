@@ -65,7 +65,7 @@ public class WorkServiceImpl implements WorkService {
             updatedWork.setTitle(workDto.title());
             updatedWork.setWorkType(WorkType.valueOf(workDto.workType().toUpperCase()));
             updatedWork.setDetails(workDto.details());
-            updatedWork.setAuthor(workDto.author());
+            updatedWork.setAuthors(workDto.author());
             updatedWork.setSubjects(workDto.subjects());
 
             return workMapper.toDto(workRepository.save(updatedWork));

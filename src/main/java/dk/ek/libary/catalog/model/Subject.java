@@ -7,19 +7,18 @@ import jakarta.persistence.Id;
 
 import java.util.List;
 
-
+@Entity
 public class Subject {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String name;
 
-    private List<Author> authors;
-
-    public Subject(Long id, String name, List<Author> authors) {
+    public Subject(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.authors = authors;
     }
 
     public Subject() {
@@ -39,13 +38,5 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
     }
 }
