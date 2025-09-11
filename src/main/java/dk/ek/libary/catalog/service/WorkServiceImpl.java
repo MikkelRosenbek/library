@@ -4,8 +4,6 @@ import dk.ek.libary.catalog.dto.WorkDTO;
 import dk.ek.libary.catalog.dto.WorkMapper;
 import dk.ek.libary.catalog.model.Work;
 import dk.ek.libary.catalog.model.WorkType;
-import dk.ek.libary.catalog.repository.AuthorRepository;
-import dk.ek.libary.catalog.repository.SubjectRepository;
 import dk.ek.libary.catalog.repository.WorkRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +13,20 @@ import java.util.Optional;
 
 @Service
 public class WorkServiceImpl implements WorkService {
+
     private final WorkRepository workRepository;
     private final WorkMapper workMapper;
 
-    private final AuthorRepository authorRepository;
-    private final SubjectRepository subjectRepository;
 
-    public WorkServiceImpl(WorkRepository workRepository, WorkMapper workMapper,
-                           AuthorRepository authorRepository, SubjectRepository subjectRepository) {
+    public WorkServiceImpl(WorkRepository workRepository, WorkMapper workMapper) {
         this.workRepository = workRepository;
         this.workMapper = workMapper;
-        this.authorRepository = authorRepository;
-        this.subjectRepository = subjectRepository;
     }
 
 
     @Override
-    public WorkDTO.WorkDto createWork(WorkDTO.WorkDto workDto) {
-        Work work = workMapper.toEntity(workDto);
+    public WorkDTO.WorkDto createWork(WorkDTO.WorkDto dto) {
+        Work work = workMapper.toEntity(dto);
         work.setId(null);
         return workMapper.toDto(workRepository.save(work));
     }
@@ -40,37 +34,44 @@ public class WorkServiceImpl implements WorkService {
     @Override
     public List<WorkDTO.WorkDto> getAllWorks() {
         List<Work> works = workRepository.findAll();
-        List<WorkDTO.WorkDto> workDtos = new ArrayList<>();
-        for (var work : works) {
-            workDtos.add(workMapper.toDto(work));
+        List<WorkDTO.WorkDto> out = new ArrayList<>();
+        for (Work w : works) {
+            out.add(workMapper.toDto(w));
         }
-        return workDtos;
+        return out;
     }
 
     @Override
     public WorkDTO.WorkDto getWorkById(Long id) {
-        Optional<Work> workOpt = workRepository.findById(id);
-        if (workOpt.isPresent()) {
-            return workMapper.toDto(workOpt.get());
+        Optional<Work> opt = workRepository.findById(id);
+        if (opt.isPresent()) {
+            return workMapper.toDto(opt.get());
         }
         throw new RuntimeException("Work not found with id: " + id);
     }
 
     @Override
-    public WorkDTO.WorkDto updateWork(Long id, WorkDTO.WorkDto workDto) {
-        Optional<Work> existingWork = workRepository.findById(id);
-        if (existingWork.isPresent()) {
-            Work updatedWork = existingWork.get();
+    public WorkDTO.WorkDto updateWork(Long id, WorkDTO.WorkDto dto) {
+        Work existing = workRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Work not found with id: " +id));
 
-            updatedWork.setTitle(workDto.title());
-            updatedWork.setWorkType(WorkType.valueOf(workDto.workType().toUpperCase()));
-            updatedWork.setDetails(workDto.details());
-            updatedWork.setAuthors(workDto.author());
-            updatedWork.setSubjects(workDto.subjects());
-
-            return workMapper.toDto(workRepository.save(updatedWork));
+        // Primitve fields
+        existing.setTitle(dto.title());
+        if (dto.workType() != null) {
+            existing.setWorkType(WorkType.valueOf(dto.workType().toUpperCase()));
+        } else {
+            existing.setWorkType(null);
         }
-        throw new RuntimeException("Work not found with id: " + id);
+        existing.setDetails(dto.details());
+
+        if (dto.authors() != null) {
+            existing.getAuthors().clear();
+            for (var aDto : dto.authors()) {
+                existing.addAuthor(workMapper.toEntity(dto).getAuthors().iterator().next());
+            }
+        }
+
+        return workMapper.toDto(workRepository.save(existing));
     }
 
     @Override
@@ -87,24 +88,11 @@ public class WorkServiceImpl implements WorkService {
         if (title == null || title.isEmpty()) {
             throw new RuntimeException("No works found with title " + title);
         }
-
         List<Work> works = workRepository.findByTitleContaining(title);
-        List<WorkDTO.WorkDto> workDtos = new ArrayList<>();
-        for (var work : works) {
-            workDtos.add(workMapper.toDto(work));
+        List<WorkDTO.WorkDto> out = new ArrayList<>();
+        for (Work w : works) {
+            out.add(workMapper.toDto(w));
         }
-        return workDtos;
+        return out;
     }
-
-
-    @Override
-    public WorkDTO.WorkDto createWork(WorkDTO.WorkDto workDto) {
-        Work work = workMapper.toEntity(workDto);
-        work.setId(null);
-        return workMapper.toDto(workRepository.save(work));
-    }
-
-
-
-
 }
