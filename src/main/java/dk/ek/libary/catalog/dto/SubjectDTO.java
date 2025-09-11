@@ -1,6 +1,5 @@
 package dk.ek.libary.catalog.dto;
 
-import java.util.List;
-
-public record SubjectDTO(Long id, String name, List<AuthorDto> authors) {
+public class SubjectDTO {
+    public record SubjectDto(Long id, String name) {}
 }

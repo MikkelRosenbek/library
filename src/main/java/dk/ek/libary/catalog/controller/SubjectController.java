@@ -1,6 +1,5 @@
 package dk.ek.libary.catalog.controller;
 
-import dk.ek.libary.catalog.dto.SubjectDTO;
 import dk.ek.libary.catalog.service.SubjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class SubjectController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SubjectDTO.SubjectDto>> getAllSubjects() {
+    public ResponseEntity<List<SubjectDTOSLET.SubjectDto>> getAllSubjects() {
         try {
             return ResponseEntity.ok(subjectService.getAllSubjects());
         } catch (RuntimeException e) {
@@ -29,7 +28,7 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubjectDTO.SubjectDto> getSubjectById(@PathVariable Long id) {
+    public ResponseEntity<SubjectDTOSLET.SubjectDto> getSubjectById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(subjectService.getSubjectById(id));
         } catch (RuntimeException e) {
@@ -38,7 +37,7 @@ public class SubjectController {
     }
 
     @PostMapping
-    public ResponseEntity<SubjectDTO.SubjectDto> createSubject(@RequestBody SubjectDTO.SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDTOSLET.SubjectDto> createSubject(@RequestBody SubjectDTOSLET.SubjectDto subjectDto) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(subjectService.createSubject(subjectDto));
         } catch (RuntimeException e) {
@@ -47,8 +46,8 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubjectDTO.SubjectDto> updateSubject(@PathVariable Long id,
-                                                               @RequestBody SubjectDTO.SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDTOSLET.SubjectDto> updateSubject(@PathVariable Long id,
+                                                                   @RequestBody SubjectDTOSLET.SubjectDto subjectDto) {
         try {
             return ResponseEntity.ok(subjectService.updateSubject(id, subjectDto));
         } catch (RuntimeException e) {
