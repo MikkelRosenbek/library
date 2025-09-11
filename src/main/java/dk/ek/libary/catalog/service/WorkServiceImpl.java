@@ -4,6 +4,8 @@ import dk.ek.libary.catalog.dto.WorkDTO;
 import dk.ek.libary.catalog.dto.WorkMapper;
 import dk.ek.libary.catalog.model.Work;
 import dk.ek.libary.catalog.model.WorkType;
+import dk.ek.libary.catalog.repository.AuthorRepository;
+import dk.ek.libary.catalog.repository.SubjectRepository;
 import dk.ek.libary.catalog.repository.WorkRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,15 @@ public class WorkServiceImpl implements WorkService {
     private final WorkRepository workRepository;
     private final WorkMapper workMapper;
 
-    public WorkServiceImpl(WorkRepository workRepository, WorkMapper workMapper) {
+    private final AuthorRepository authorRepository;
+    private final SubjectRepository subjectRepository;
+
+    public WorkServiceImpl(WorkRepository workRepository, WorkMapper workMapper,
+                           AuthorRepository authorRepository, SubjectRepository subjectRepository) {
         this.workRepository = workRepository;
         this.workMapper = workMapper;
+        this.authorRepository = authorRepository;
+        this.subjectRepository = subjectRepository;
     }
 
 
@@ -87,4 +95,16 @@ public class WorkServiceImpl implements WorkService {
         }
         return workDtos;
     }
+
+
+    @Override
+    public WorkDTO.WorkDto createWork(WorkDTO.WorkDto workDto) {
+        Work work = workMapper.toEntity(workDto);
+        work.setId(null);
+        return workMapper.toDto(workRepository.save(work));
+    }
+
+
+
+
 }

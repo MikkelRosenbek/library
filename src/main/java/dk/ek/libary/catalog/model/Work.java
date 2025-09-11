@@ -1,11 +1,6 @@
 package dk.ek.libary.catalog.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +14,21 @@ public class Work {
     private String title;
     private WorkType workType;
     private String details;
-    private String author;
-    private String subjects;
+
+    @ManyToMany
+    private Author author;
+
+    @ManyToMany
+    private Subject subjects;
 
     @OneToMany(mappedBy = "work", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Edition> editions = new ArrayList<>();
 
+
     public Work() {
     }
 
-    public Work(Long id, String title, WorkType workType, String details, String author, String subjects) {
+    public Work(Long id, String title, WorkType workType, String details, Author author, Subject subjects) {
         this.id = id;
         this.title = title;
         this.workType = workType;
@@ -69,19 +69,19 @@ public class Work {
         this.details = details;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String authors) {
+    public void setAuthor(Author authors) {
         this.author = authors;
     }
 
-    public String getSubjects() {
+    public Subject getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(String subjects) {
+    public void setSubjects(Subject subjects) {
         this.subjects = subjects;
     }
 
