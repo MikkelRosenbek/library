@@ -3,6 +3,7 @@ package dk.ek.libary.catalog.service;
 import dk.ek.libary.catalog.dto.AuthorDTO;
 import dk.ek.libary.catalog.dto.SubjectDTO;
 import dk.ek.libary.catalog.dto.SubjectMapper;
+import dk.ek.libary.catalog.exception.NotFoundException;
 import dk.ek.libary.catalog.model.Author;
 import dk.ek.libary.catalog.model.Subject;
 import dk.ek.libary.catalog.repository.SubjectRepository;
@@ -48,16 +49,17 @@ public class SubjectServiceImpl implements SubjectService {
         if (subject.isPresent()) {
             return subjectMapper.toDto(subject.get());
         }
-        throw new RuntimeException("Subject not found with id: " + id);
+        throw new NotFoundException("Subject not found with id: " + id);
     }
 
     @Override
     public SubjectDTO.SubjectDto updateSubject(Long id, SubjectDTO.SubjectDto subjectDto) {
-        Subject existing = subjectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Subject not found with id: " + id));
-        existing.setName(subjectDto.name());
-        Subject saved = subjectRepository.save(existing);
-        return subjectMapper.toDto(saved);
+        Optional<Subject> subject = subjectRepository.findById(id);
+        if (subject.isPresent()) {
+            return subjectMapper.toDto(subject.get());
+        } else {
+            throw new NotFoundException("Subject not found with id: " + id);
+        }
     }
 
     @Override
@@ -65,7 +67,7 @@ public class SubjectServiceImpl implements SubjectService {
         if (subjectRepository.existsById(id)) {
             subjectRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Subject not found with id: " + id);
+            throw new NotFoundException("Subject not found with id: " + id);
         }
     }
 }

@@ -1,6 +1,6 @@
 package dk.ek.libary.catalog.controller;
 
-import dk.ek.libary.catalog.dto.AuthorDto;
+import dk.ek.libary.catalog.dto.AuthorDTO;
 import dk.ek.libary.catalog.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,50 +18,31 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    public ResponseEntity<List<AuthorDto>> getAllAuthors() {
-        try {
+    @GetMapping
+    public ResponseEntity<List<AuthorDTO.AuthorDto>> getAllAuthors() {
             return ResponseEntity.ok(authorService.getAllAuthors());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDto.AuthorDto> getAuthorById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(authorService.getAuthorById(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<AuthorDTO.AuthorDto> getAuthorById(@PathVariable Long id) {
+        return ResponseEntity.ok(authorService.getAuthorById(id));
     }
 
     @PostMapping
-    public ResponseEntity<AuthorDto.AuthorDto> createAuthor(@RequestBody AuthorDto.AuthorDto authorDto) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(authorService.createAuthor(authorDto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<AuthorDTO.AuthorDto> createAuthor(@RequestBody AuthorDTO.AuthorDto authorDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authorService.createAuthor(authorDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorDto.AuthorDto> updateAuthor(@PathVariable Long id,
-                                                            @RequestBody AuthorDto.AuthorDto authorDto) {
-        try {
-            return ResponseEntity.ok(authorService.updateAuthor(id, authorDto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<AuthorDTO.AuthorDto> updateAuthor(@PathVariable Long id,
+                                                            @RequestBody AuthorDTO.AuthorDto authorDto) {
+        return ResponseEntity.ok(authorService.updateAuthor(id, authorDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
-        try {
             authorService.deleteAuthor(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
 

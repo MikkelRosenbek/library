@@ -20,56 +20,32 @@ public class WorkController {
 
     @GetMapping
     public ResponseEntity<List<WorkDTO.WorkDto>> getAllWorks() {
-        try {
-            return ResponseEntity.ok(workService.getAllWorks());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.ok(workService.getAllWorks());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<WorkDTO.WorkDto> getWorkById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(workService.getWorkById(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.ok(workService.getWorkById(id));
     }
 
     @PostMapping
     public ResponseEntity<WorkDTO.WorkDto> addWork(@RequestBody WorkDTO.WorkDto workDto) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(workService.createWork(workDto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(workService.createWork(workDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<WorkDTO.WorkDto> updateWork(@PathVariable Long id, @RequestBody WorkDTO.WorkDto workDto) {
-        try {
-            return ResponseEntity.ok(workService.updateWork(id, workDto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.ok(workService.updateWork(id, workDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWork(@PathVariable Long id) {
-        try {
-            workService.deleteWork(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        workService.deleteWork(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<WorkDTO.WorkDto>> searchWorks(@RequestParam String title) {
-        try {
-            return ResponseEntity.ok(workService.searchWorks(title));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.ok(workService.searchWorks(title));
     }
 }

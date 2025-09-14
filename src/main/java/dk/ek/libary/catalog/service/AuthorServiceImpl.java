@@ -4,6 +4,7 @@ import dk.ek.libary.catalog.dto.AuthorDTO;
 import dk.ek.libary.catalog.dto.AuthorMapper;
 import dk.ek.libary.catalog.model.Author;
 import dk.ek.libary.catalog.repository.AuthorRepository;
+import dk.ek.libary.catalog.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,17 +45,22 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<Author> author = authorRepository.findById(id);
         if (author.isPresent()) {
             return authorMapper.toDto(author.get());
+        } else {
+            throw new NotFoundException("Author not found with id: " + id);
         }
-        throw new RuntimeException("Author not found with id: " + id);
     }
 
     @Override
     public AuthorDTO.AuthorDto updateAuthor(Long id, AuthorDTO.AuthorDto authorDto) {
-        Author existing = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
-        existing.setName(authorDto.name());
-        Author saved = authorRepository.save(existing);
-        return authorMapper.toDto(saved);
+        Optional<Author> author = authorRepository.findById(id);
+        if (author.isPresent()) {
+            Author existing = author.get();
+            existing.setName(authorDto.name());
+            Author saved = authorRepository.save(existing);
+            return authorMapper.toDto(saved);
+        } else {
+            throw new NotFoundException("Author not found with id: " + id);
+        }
     }
 
     @Override
@@ -62,7 +68,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (authorRepository.existsById(id)) {
             authorRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Author not found with id: " + id);
+            throw new NotFoundException("Author not found with id: " + id);
         }
     }
 
